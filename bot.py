@@ -1,6 +1,7 @@
 import os
 import asyncio
 from telegram import Bot
+from PIL import Image, ImageDraw
 
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
@@ -8,18 +9,20 @@ CHAT_ID = os.getenv("CHAT_ID")
 bot = Bot(token=TOKEN)
 
 async def main():
-    print("✅ شغال")
 
-    while True:
-        try:
-            with open("video.mp4", "rb") as vid:
-                await bot.send_video(chat_id=CHAT_ID, video=vid, caption="🤍 قرآن كريم")
+    img = Image.new("RGB", (1080, 1920), color=(15, 15, 15))
 
-            print("📹 تم إرسال فيديو")
+    draw = ImageDraw.Draw(img)
 
-        except Exception as e:
-            print("❌ Error:", e)
+    text = "﴿ وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ ﴾"
 
-        await asyncio.sleep(86400)  # كل يوم
+    draw.text((120, 900), text, fill="white")
+
+    img.save("quran.png")
+
+    with open("quran.png", "rb") as photo:
+        await bot.send_photo(chat_id=CHAT_ID, photo=photo)
+
+    print("✅ تم إرسال الصورة")
 
 asyncio.run(main())
