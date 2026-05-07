@@ -1,30 +1,25 @@
 import os
 import asyncio
 from telegram import Bot
-from datetime import datetime
 
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
 bot = Bot(token=TOKEN)
 
-TARGET_HOUR = 12  # الساعة 12
-TARGET_MINUTE = 0
-
 async def main():
-    print("✅ البوت شغال")
+    print("✅ شغال")
 
     while True:
-        now = datetime.now()
+        try:
+            with open("video.mp4", "rb") as vid:
+                await bot.send_video(chat_id=CHAT_ID, video=vid, caption="🤍 قرآن كريم")
 
-        if now.hour == TARGET_HOUR and now.minute == TARGET_MINUTE:
-            try:
-                await bot.send_message(chat_id=CHAT_ID, text="🔥 الرسالة اليومية")
-                print("📩 تم الإرسال")
-                await asyncio.sleep(60)  # يمنع التكرار
-            except Exception as e:
-                print("❌ Error:", e)
+            print("📹 تم إرسال فيديو")
 
-        await asyncio.sleep(30)
+        except Exception as e:
+            print("❌ Error:", e)
+
+        await asyncio.sleep(86400)  # كل يوم
 
 asyncio.run(main())
