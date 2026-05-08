@@ -4,10 +4,9 @@ import arabic_reshaper
 
 from bidi.algorithm import get_display
 from telegram import Bot
-
-from moviepy import (
+from moviepy.editor import
     VideoFileClip,
-    AudioFileClip,
+    AudioFileClip
     TextClip,
     CompositeVideoClip
 )
