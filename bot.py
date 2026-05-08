@@ -4,33 +4,57 @@ import arabic_reshaper
 
 from bidi.algorithm import get_display
 from telegram import Bot
-from PIL import Image, ImageDraw, ImageFont
+
+from moviepy import (
+    VideoFileClip,
+    AudioFileClip,
+    TextClip,
+    CompositeVideoClip
+)
 
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
 bot = Bot(token=TOKEN)
 
+VERSE = "﴿ وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ ﴾"
+
 async def main():
 
-    img = Image.new("RGB", (1080, 1920), color=(10, 10, 10))
+    reshaped = arabic_reshaper.reshape(VERSE)
+    arabic_text = get_display(reshaped)
 
-    draw = ImageDraw.Draw(img)
+    video = VideoFileClip("rain.mp4").subclipped(0, 15)
 
-    font = ImageFont.truetype("Amiri-Regular.ttf", 70)
+    audio = AudioFileClip("quran.mp3").subclipped(0, 15)
 
-    text = "﴿ وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ ﴾"
+    txt = TextClip(
+        text=arabic_text,
+        font="Amiri-Regular.ttf",
+        font_size=70,
+        color="white",
+        method="caption",
+        size=(900, None)
+    ).with_position(("center", "center")).with_duration(15)
 
-    reshaped_text = arabic_reshaper.reshape(text)
-    bidi_text = get_display(reshaped_text)
+    final = CompositeVideoClip([video, txt])
 
-    draw.text((100, 900), bidi_text, font=font, fill="white")
+    final = final.with_audio(audio)
 
-    img.save("quran.png")
+    final.write_videofile(
+        "reel.mp4",
+        fps=24,
+        codec="libx264",
+        audio_codec="aac"
+    )
 
-    with open("quran.png", "rb") as photo:
-        await bot.send_photo(chat_id=CHAT_ID, photo=photo)
+    with open("reel.mp4", "rb") as vid:
+        await bot.send_video(
+            chat_id=CHAT_ID,
+            video=vid,
+            caption="🤍 قرآن كريم"
+        )
 
-    print("✅ تم إرسال الصورة")
+    print("✅ تم إرسال الريلز")
 
 asyncio.run(main())
