@@ -1,5 +1,8 @@
 import os
 import asyncio
+import arabic_reshaper
+
+from bidi.algorithm import get_display
 from telegram import Bot
 from PIL import Image, ImageDraw, ImageFont
 
@@ -18,7 +21,10 @@ async def main():
 
     text = "﴿ وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ ﴾"
 
-    draw.text((100, 900), text, font=font, fill="white")
+    reshaped_text = arabic_reshaper.reshape(text)
+    bidi_text = get_display(reshaped_text)
+
+    draw.text((100, 900), bidi_text, font=font, fill="white")
 
     img.save("quran.png")
 
