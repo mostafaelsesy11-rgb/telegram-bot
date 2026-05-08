@@ -4,13 +4,7 @@ import arabic_reshaper
 
 from bidi.algorithm import get_display
 from telegram import Bot
-from moviepy.editor import
-    VideoFileClip,
-    AudioFileClip
-    TextClip,
-    CompositeVideoClip
-)
-
+from moviepy.editor import VideoFileClip, AudioFileClip, TextClip, CompositeVideoClip
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
