@@ -17,9 +17,9 @@ async def main():
     reshaped = arabic_reshaper.reshape(VERSE)
     arabic_text = get_display(reshaped)
 
-    video = VideoFileClip("rain.mp4").subclipped(0, 15)
+video = VideoFileClip("rain.mp4").subclip(0, 15)
 
-    audio = AudioFileClip("quran.mp3").subclipped(0, 15)
+audio = AudioFileClip("quran.mp3").subclip(0, 15)
 
     txt = TextClip(
         text=arabic_text,
